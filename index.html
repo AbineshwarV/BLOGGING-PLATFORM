@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechBlog Hub</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light: #ecf0f1;
+            --highlight: #f39c12;
+            --bg-dark: #34495e;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--light);
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 1rem 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--highlight);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .post-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .post-card p {
+            color: var(--bg-dark);
+            margin-bottom: 15px;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .post-meta button {
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .post-meta button:hover {
+            background: var(--highlight);
+        }
+
+        .comment-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .comment-section h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .comment strong {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .comment p {
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--highlight);
+        }
+
+        .form-group label {
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            nav .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-links {
+                margin-top: 10px;
+            }
+
+            .post-card {
+                padding: 15px;
+            }
+
+            .post-meta {
+                font-size: 0.85rem;
+            }
+
+            button {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>TechBlog Hub</h1>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#register">Register</a>
+                <a href="#login">Login</a>
+                <a href="#create-post" id="createPostLink" style="display: none;">Create Post</a>
+                <a href="#profile" id="profileLink" style="display: none;">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="content">
+        <div id="home">
+            <h2>Latest Tech Posts</h2>
+            <div id="postsContainer"></div>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="register" style="display: none;">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login" style="display: none;">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Create Post Form -->
+        <div id="create-post" style="display: none;">
+            <h2>Create New Post</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Content:</label>
+                    <textarea rows="6" required></textarea>
+                </div>
+                <button type="submit">Publish Post</button>
+            </form>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile" style="display: none;">
+            <h2>Your Posts</h2>
+            <div id="userPosts"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        // Initialize sample posts
+        if (posts.length === 0) {
+            posts = [
+                {
+                    id: 1,
+                    title: "The Future of Artificial Intelligence",
+                    content: "AI is revolutionizing industries from healthcare to finance. Recent advancements in machine learning are enabling computers to perform complex tasks with human-like accuracy...",
+                    author: "admin",
+                    date: "2024-03-15",
+                    comments: [
+                        {user: "coder123", content: "Great overview of AI trends!", date: "2024-03-16"}
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Cybersecurity in 2024",
+                    content: "With increasing cyber threats, organizations must adopt zero-trust architectures and AI-powered security systems. Learn about the latest security frameworks...",
+                    author: "admin",
+                    date: "2024-03-14",
+                    comments: []
+                }
+            ];
+            localStorage.setItem('posts', JSON.stringify(posts));
+        }
+
+        // Navigation Handling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('#content > div').forEach(div => {
+                    div.style.display = 'none';
+                });
+                document.querySelector(e.target.getAttribute('href')).style.display = 'block';
+            });
+        });
+
+        // User Registration
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = e.target[0].value;
+            const password = e.target[1].value;
+            
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists!');
+                return;
+            }
+            
+            users.push({username, password});
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('Registration successful! Please login.');
+            window.location.hash = '#login';
+        });
+
+        // User Login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = e.target[0].value;
+            const password = e.target[1].value;
+            
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                updateNav();
+                window.location.hash = '#home';
+                loadPosts();
+            } else {
+                alert('Invalid credentials!');
+            }
+        });
+
+        // Post Creation
+        document.getElementById('postForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = e.target[0].value;
+            const content = e.target[1].value;
+            
+            const newPost = {
+                id: posts.length + 1,
+                title,
+                content,
+                author: currentUser.username,
+                date: new Date().toISOString().split('T')[0],
+                comments: []
+            };
+            
+            posts.push(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            window.location.hash = '#home';
+        });
+
+        // Load and Display Posts
+        function loadPosts() {
+            const postsContainer = document.getElementById('postsContainer');
+            postsContainer.innerHTML = '';
+            
+            posts.forEach(post => {
+                const postEl = document.createElement('div');
+                postEl.className = 'post-card';
+                postEl.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p>${post.content}</p>
+                    <div class="post-meta">
+                        <span>By ${post.author} | ${post.date}</span>
+                        ${currentUser?.username === post.author ? 
+                            `<button onclick="deletePost(${post.id})">Delete</button>` : ''}
+                    </div>
+                    <div class="comment-section">
+                        <h4>Comments (${post.comments.length})</h4>
+                        ${post.comments.map(comment => `
+                            <div class="comment">
+                                <strong>${comment.user}</strong>
+                                <p>${comment.content}</p>
+                                <small>${comment.date}</small>
+                            </div>
+                        `).join('')}
+                        <form onsubmit="addComment(event, ${post.id})">
+                            <input type="text" placeholder="Add a comment" required>
+                            <button type="submit">Post Comment</button>
+                        </form>
+                    </div>
+                `;
+                postsContainer.appendChild(postEl);
+            });
+        }
+
+        // Comment Functionality
+        function addComment(e, postId) {
+            e.preventDefault();
+            const content = e.target[0].value;
+            const post = posts.find(p => p.id === postId);
+            
+            post.comments.push({
+                user: currentUser?.username || 'Anonymous',
+                content,
+                date: new Date().toISOString().split('T')[0]
+            });
+            
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+        }
+
+        // Delete Post
+        window.deletePost = function(postId) {
+            posts = posts.filter(post => post.id !== postId);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+        }
+
+        // Update Navigation
+        function updateNav() {
+            if (currentUser) {
+                document.getElementById('createPostLink').style.display = 'inline';
+                document.getElementById('profileLink').style.display = 'inline';
+                document.querySelector('#register').style.display = 'none';
+                document.querySelector('#login').style.display = 'none';
+            }
+        }
+
+        // Initial Load
+        updateNav();
+        loadPosts();
+    </script>
+</body>
+</html>
